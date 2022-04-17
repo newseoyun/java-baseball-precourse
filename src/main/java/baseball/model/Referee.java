@@ -8,22 +8,40 @@ import java.util.Map;
 
 public class Referee {
 
-    public boolean isCorrectNumber(List<Integer> player1Numbers, List<Integer> player2Numbers) {
-        Map<String, Integer> ballAndStrikeMap = countBallAndStrike(player1Numbers, player2Numbers);
-        return ballAndStrikeMap.get(Message.STRIKE).equals(RuleNumber.MAX);
+    private Map<String, Integer> gameScoreMap;
+
+    public boolean isCorrect(Map<String, Integer> gameScoreMap) {
+        return gameScoreMap.get(Message.STRIKE).equals(RuleNumber.MAX);
     }
 
-    private Map<String, Integer> countBallAndStrike(List<Integer> player1Numbers, List<Integer> player2Numbers) {
+    public Map<String, Integer> judgeNumberBetween(Computer computer, User user) {
+        List<Integer> computerBaseballNumbers = computer.getBaseballNumbers();
+        List<Integer> userBaseballNumbers = user.getBaseballNumbers();
+        judgeAndSaveResult(computerBaseballNumbers, userBaseballNumbers);
+        return this.gameScoreMap;
+    }
+
+    private void judgeAndSaveResult(List<Integer> computerNumbers, List<Integer> userNumbers) {
         Map<String, Integer> ballAndStrikeCountMap = initiateBallAndStrikeCountMap();
-        for (int i = 0; i < player1Numbers.size(); i++) {
-            if (player1Numbers.contains(player2Numbers.get(i)) && player1Numbers.get(i).equals(player2Numbers.get(i))) {
-                ballAndStrikeCountMap.put(Message.STRIKE, ballAndStrikeCountMap.get(Message.STRIKE) + 1);
-            }
-            if (player1Numbers.contains(player2Numbers.get(i)) && player1Numbers.get(i).equals(player2Numbers.get(i))) {
-                ballAndStrikeCountMap.put(Message.BALL, ballAndStrikeCountMap.get(Message.BALL) + 1);
-            }
+        for (int i = 0; i < userNumbers.size(); i++) {
+            putBallCount(computerNumbers, userNumbers, ballAndStrikeCountMap, i);
+            putStrikeCount(computerNumbers, userNumbers, ballAndStrikeCountMap, i);
         }
-        return ballAndStrikeCountMap;
+        this.gameScoreMap = ballAndStrikeCountMap;
+    }
+
+    private void putStrikeCount(List<Integer> computerNumbers, List<Integer> userNumbers,
+                           Map<String, Integer> ballAndStrikeCountMap, int i) {
+        if (computerNumbers.contains(userNumbers.get(i)) && !computerNumbers.get(i).equals(userNumbers.get(i))) {
+            ballAndStrikeCountMap.put(Message.BALL, ballAndStrikeCountMap.get(Message.BALL) + 1);
+        }
+    }
+
+    private void putBallCount(List<Integer> computerNumbers, List<Integer> userNumbers,
+                           Map<String, Integer> ballAndStrikeCountMap, int i) {
+        if (computerNumbers.contains(userNumbers.get(i)) && computerNumbers.get(i).equals(userNumbers.get(i))) {
+            ballAndStrikeCountMap.put(Message.STRIKE, ballAndStrikeCountMap.get(Message.STRIKE) + 1);
+        }
     }
 
     private Map<String, Integer> initiateBallAndStrikeCountMap() {
