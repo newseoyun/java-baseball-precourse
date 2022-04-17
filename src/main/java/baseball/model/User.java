@@ -28,20 +28,17 @@ public class User {
     }
 
     private void validateTotalSize(String input) {
-        if (input.length() < RuleNumber.MAX) {
-            throw new IllegalArgumentException("숫자가 부족합니다. 세자리여야합니다.");
-        }
         if (input.length() > RuleNumber.MAX) {
-            throw new IllegalArgumentException("숫자가 너무 많습니다. 세자리여야합니다.");
+            throw new IllegalArgumentException("너무 많이 입력했습니다. 세자리여야합니다.");
+        }
+        if (input.length() < RuleNumber.MAX) {
+            throw new IllegalArgumentException("너무 적게 입력했습니다. 세자리여야합니다.");
         }
     }
 
     private void validateDuplication(String input) {
-        String[] splitInput = input.split("");
-        if (splitInput[0].equals(splitInput[1])
-                || splitInput[0].equals(splitInput[2])
-                || splitInput[1].equals(splitInput[2])
-        ) {
+        String[] inputArr = input.split("");
+        if (inputArr[0].equals(inputArr[1]) || inputArr[0].equals(inputArr[2]) || inputArr[1].equals(inputArr[2])) {
             throw new IllegalArgumentException("숫자는 중복되지 않아야합니다.");
         }
     }
