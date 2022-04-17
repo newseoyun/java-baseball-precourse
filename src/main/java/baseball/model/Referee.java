@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Referee {
 
-    private Map<String, Integer> gameScoreMap;
+    private Map<String, Integer> gameScoreMap = new HashMap<>();
 
     public boolean isCorrect(Map<String, Integer> gameScoreMap) {
         return gameScoreMap.get(Message.STRIKE).equals(RuleNumber.MAX);
@@ -22,33 +22,28 @@ public class Referee {
     }
 
     private void judgeAndSaveResult(List<Integer> computerNumbers, List<Integer> userNumbers) {
-        Map<String, Integer> ballAndStrikeCountMap = initiateBallAndStrikeCountMap();
+        initiateGameScoreMap();
         for (int i = 0; i < userNumbers.size(); i++) {
-            putBallCount(computerNumbers, userNumbers, ballAndStrikeCountMap, i);
-            putStrikeCount(computerNumbers, userNumbers, ballAndStrikeCountMap, i);
+            putBallCount(computerNumbers, userNumbers, i);
+            putStrikeCount(computerNumbers, userNumbers, i);
         }
-        this.gameScoreMap = ballAndStrikeCountMap;
     }
 
-    private void putStrikeCount(List<Integer> computerNumbers, List<Integer> userNumbers,
-                           Map<String, Integer> ballAndStrikeCountMap, int i) {
+    private void putStrikeCount(List<Integer> computerNumbers, List<Integer> userNumbers, int i) {
         if (computerNumbers.contains(userNumbers.get(i)) && !computerNumbers.get(i).equals(userNumbers.get(i))) {
-            ballAndStrikeCountMap.put(Message.BALL, ballAndStrikeCountMap.get(Message.BALL) + 1);
+            gameScoreMap.put(Message.BALL, gameScoreMap.get(Message.BALL) + 1);
         }
     }
 
-    private void putBallCount(List<Integer> computerNumbers, List<Integer> userNumbers,
-                           Map<String, Integer> ballAndStrikeCountMap, int i) {
+    private void putBallCount(List<Integer> computerNumbers, List<Integer> userNumbers, int i) {
         if (computerNumbers.contains(userNumbers.get(i)) && computerNumbers.get(i).equals(userNumbers.get(i))) {
-            ballAndStrikeCountMap.put(Message.STRIKE, ballAndStrikeCountMap.get(Message.STRIKE) + 1);
+            gameScoreMap.put(Message.STRIKE, gameScoreMap.get(Message.STRIKE) + 1);
         }
     }
 
-    private Map<String, Integer> initiateBallAndStrikeCountMap() {
-        Map<String, Integer> ballAndStrikeCountMap = new HashMap<>();
-        ballAndStrikeCountMap.put(Message.STRIKE, 0);
-        ballAndStrikeCountMap.put(Message.BALL, 0);
-        return ballAndStrikeCountMap;
+    private void initiateGameScoreMap() {
+        gameScoreMap.put(Message.STRIKE, 0);
+        gameScoreMap.put(Message.BALL, 0);
     }
 
 }

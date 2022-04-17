@@ -44,6 +44,7 @@ public class GameController {
             gameStart();
         }
         if (inputNumber == 2) {
+            messenger.printEnd();
             System.exit(0);
         }
     }
