@@ -39,14 +39,14 @@ public class GameController {
     private void confirmTryAgain() {
         messenger.printRetry();
         String input = Console.readLine();
-        int inputNumber = Integer.parseInt(input);
-        if (inputNumber == 1) {
+        if (input.equals("1")) {
             gameStart();
         }
-        if (inputNumber == 2) {
+        if (input.equals("2")) {
             messenger.printEnd();
             System.exit(0);
         }
+        throw new IllegalArgumentException("잘못된 입력입니다.");
     }
 
 }
